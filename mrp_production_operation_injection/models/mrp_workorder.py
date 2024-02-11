@@ -7,7 +7,14 @@ class MrpWorkorder(models.Model):
 
     _inherit = "mrp.workorder"
 
-    sequence = fields.Integer(readonly=True)
+    READONLY_STATES = {
+        # "ready": [("readonly", True)],
+        # "progress": [("readonly", True)],
+        "done": [("readonly", True)],
+        "cancel": [("readonly", True)],
+    }
+    
+    sequence = fields.Integer(states=READONLY_STATES)
 
     def _action_confirm(self):
         # HACK: Ensure self is ordered according to redefined _order attribute
